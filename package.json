@@ -1,0 +1,15 @@
+{
+  "name": "api-taller-automotriz",
+  "version": "1.0.0",
+  "description": "API REST por capas para la gestión de turnos de un taller automotriz",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "keywords": ["express", "api", "rest", "capas"],
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
