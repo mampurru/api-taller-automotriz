@@ -66,11 +66,12 @@ function obtenerPorId(id) {
   return turnos.find((t) => t.id === id);
 }
 
-function crear(datos) {
+// Arma un turno con los datos recibidos y calcula su total a pagar
+function construirTurno(id, datos) {
   const prioritario = datos.prioritario === true;
 
-  const nuevoTurno = {
-    id: siguienteId++,
+  return {
+    id,
     cliente: datos.cliente.trim(),
     placa: datos.placa.trim().toUpperCase(),
     vehiculo: datos.vehiculo.trim(),
@@ -81,9 +82,22 @@ function crear(datos) {
     porcentajeRecargo: prioritario ? PORCENTAJE_RECARGO : 0,
     totalPagar: calcularTotal(datos.precioBase, prioritario)
   };
+}
 
+function crear(datos) {
+  const nuevoTurno = construirTurno(siguienteId++, datos);
   turnos.push(nuevoTurno);
   return nuevoTurno;
 }
 
-module.exports = { obtenerTodos, obtenerPorId, crear, calcularTotal, N, PORCENTAJE_RECARGO };
+// Reemplaza los datos de un turno existente (el id se conserva)
+// y vuelve a calcular el total, por si cambió el precio o la prioridad.
+function actualizar(id, datos) {
+  const indice = turnos.findIndex((t) => t.id === id);
+  if (indice === -1) return null;
+
+  turnos[indice] = construirTurno(id, datos);
+  return turnos[indice];
+}
+
+module.exports = { obtenerTodos, obtenerPorId, crear, actualizar, calcularTotal, N, PORCENTAJE_RECARGO };

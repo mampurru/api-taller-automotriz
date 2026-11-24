@@ -97,6 +97,9 @@ El servidor queda en `http://localhost:3000`.
 | GET    | `/api/turnos`     | Lista todos los turnos            | 200      |
 | GET    | `/api/turnos/:id` | Obtiene un turno por su id        | 200, 404 |
 | POST   | `/api/turnos`     | Registra un nuevo turno           | 201, 400 |
+| PUT    | `/api/turnos/:id` | Actualiza un turno (extra)        | 200, 400, 404 |
+
+> El `PUT` es un endpoint adicional a los mínimos requeridos. Recibe el turno completo (los mismos campos y validaciones del `POST`), conserva el `id` y **vuelve a calcular el `totalPagar`** por si cambió el precio o la prioridad.
 
 ---
 
@@ -157,6 +160,23 @@ El servidor queda en `http://localhost:3000`.
   ]
 }
 ```
+
+### ✏️ Actualización – PUT `/api/turnos/1` → 200 OK
+
+**Petición:**
+```json
+{
+  "cliente": "Carlos Ramírez",
+  "placa": "ABC123",
+  "vehiculo": "Chevrolet Spark 2018",
+  "tipoServicio": "cambio de aceite",
+  "fecha": "2026-11-26T08:00",
+  "precioBase": 130000,
+  "prioritario": true
+}
+```
+
+**Respuesta obtenida (200):** el mismo turno con `"id": 1`, `"porcentajeRecargo": 10` y `"totalPagar": 143000`. Si el id no existe responde 404, y si los datos son inválidos responde 400.
 
 ### 🔍 Consulta de id inexistente – 404 Not Found
 

@@ -44,6 +44,24 @@ const crearTurno = (req, res) => {
   res.status(201).json(nuevoTurno);
 };
 
+// PUT /api/turnos/:id -> 200, 400 o 404
+const actualizarTurno = (req, res) => {
+  const id = Number(req.params.id);
+
+  if (!turnosService.obtenerPorId(id)) {
+    return res.status(404).json({ error: `No existe un turno con id ${req.params.id}` });
+  }
+
+  const errores = validarTurno(req.body);
+
+  if (errores.length > 0) {
+    return res.status(400).json({ error: 'Datos inválidos', detalles: errores });
+  }
+
+  const turnoActualizado = turnosService.actualizar(id, req.body);
+  res.status(200).json(turnoActualizado);
+};
+
 // ---- Validaciones de entrada ----
 function validarTurno(body) {
   const errores = [];
@@ -92,4 +110,4 @@ function validarTurno(body) {
   return errores;
 }
 
-module.exports = { listarTurnos, obtenerTurno, crearTurno };
+module.exports = { listarTurnos, obtenerTurno, crearTurno, actualizarTurno };
